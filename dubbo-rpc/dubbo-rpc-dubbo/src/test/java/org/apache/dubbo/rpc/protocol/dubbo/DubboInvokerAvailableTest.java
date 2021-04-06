@@ -20,6 +20,7 @@ package org.apache.dubbo.rpc.protocol.dubbo;
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.extension.ExtensionLoader;
 import org.apache.dubbo.common.utils.NetUtils;
+import org.apache.dubbo.common.utils.ReflectUtils;
 import org.apache.dubbo.remoting.Constants;
 import org.apache.dubbo.remoting.exchange.ExchangeClient;
 import org.apache.dubbo.rpc.Exporter;
@@ -42,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * Check available status for dubboInvoker
  */
-public class DubboInvokerAvilableTest {
+public class DubboInvokerAvailableTest {
     private static DubboProtocol protocol;
     private static ProxyFactory proxy = ExtensionLoader.getExtensionLoader(ProxyFactory.class).getAdaptiveExtension();
 
@@ -156,7 +157,7 @@ public class DubboInvokerAvilableTest {
 
     private ExchangeClient[] getClients(DubboInvoker<?> invoker) throws Exception {
         Field field = DubboInvoker.class.getDeclaredField("clients");
-        field.setAccessible(true);
+        ReflectUtils.makeAccessible(field);
         ExchangeClient[] clients = (ExchangeClient[]) field.get(invoker);
         Assertions.assertEquals(1, clients.length);
         return clients;

@@ -19,8 +19,6 @@ package org.apache.dubbo.registry.nacos;
 
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.URLBuilder;
-import org.apache.dubbo.common.logger.Logger;
-import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.StringUtils;
 import org.apache.dubbo.common.utils.UrlUtils;
 import org.apache.dubbo.registry.NotifyListener;
@@ -120,11 +118,9 @@ public class NacosRegistry extends FailbackRegistry {
      */
     private volatile ScheduledExecutorService scheduledExecutorService;
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final NacosNamingServiceWrapper namingService;
 
-    private final NamingService namingService;
-
-    public NacosRegistry(URL url, NamingService namingService) {
+    public NacosRegistry(URL url, NacosNamingServiceWrapper namingService) {
         super(url);
         this.namingService = namingService;
     }
@@ -151,6 +147,7 @@ public class NacosRegistry extends FailbackRegistry {
     @Override
     public void doRegister(URL url) {
         final String serviceName = getServiceName(url);
+
         final Instance instance = createInstance(url);
         /**
          *  namingService.registerInstance with {@link org.apache.dubbo.registry.support.AbstractRegistry#registryUrl}
@@ -621,7 +618,7 @@ public class NacosRegistry extends FailbackRegistry {
          * @param namingService {@link NamingService}
          * @throws NacosException
          */
-        void callback(NamingService namingService) throws NacosException;
+        void callback(NacosNamingServiceWrapper namingService) throws NacosException;
 
     }
 }

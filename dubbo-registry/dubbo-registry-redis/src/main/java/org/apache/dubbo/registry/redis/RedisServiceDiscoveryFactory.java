@@ -14,20 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.dubbo.common.serialize.kryo.utils;
+package org.apache.dubbo.registry.redis;
 
-public abstract class ReflectionUtils {
+import org.apache.dubbo.common.URL;
+import org.apache.dubbo.registry.client.AbstractServiceDiscoveryFactory;
+import org.apache.dubbo.registry.client.ServiceDiscovery;
 
-    public static boolean checkZeroArgConstructor(Class clazz) {
-        try {
-            clazz.getDeclaredConstructor();
-            return true;
-        } catch (NoSuchMethodException e) {
-            return false;
-        }
+public class RedisServiceDiscoveryFactory extends AbstractServiceDiscoveryFactory {
+
+    @Override
+    protected ServiceDiscovery createDiscovery(URL registryURL) {
+        return new RedisServiceDiscovery();
     }
 
-    public static boolean isJdk(Class clazz) {
-        return clazz.getName().startsWith("java.") || clazz.getName().startsWith("javax.");
-    }
 }
