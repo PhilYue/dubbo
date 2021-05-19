@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -171,6 +172,7 @@ public class ExtensionLoader<T> {
     }
 
     // For testing purposes only
+    @Deprecated
     public static void resetExtensionLoader(Class type) {
         ExtensionLoader loader = EXTENSION_LOADERS.get(type);
         if (loader != null) {
@@ -184,6 +186,8 @@ public class ExtensionLoader<T> {
         }
     }
 
+    // only for unit test
+    @Deprecated
     public static void destroyAll() {
         EXTENSION_INSTANCES.forEach((_type, instance) -> {
             if (instance instanceof Lifecycle) {
@@ -259,6 +263,8 @@ public class ExtensionLoader<T> {
      */
     public List<T> getActivateExtension(URL url, String[] values, String group) {
         List<T> activateExtensions = new ArrayList<>();
+        // solve the bug of using @SPI's wrapper method to report a null pointer exception.
+        TreeMap<Class, T> activateExtensionsMap = new TreeMap<>(ActivateComparator.COMPARATOR);
         List<String> names = values == null ? new ArrayList<>(0) : asList(values);
         if (!names.contains(REMOVE_VALUE_PREFIX + DEFAULT_KEY)) {
             getExtensionClasses();
@@ -281,10 +287,12 @@ public class ExtensionLoader<T> {
                         && !names.contains(name)
                         && !names.contains(REMOVE_VALUE_PREFIX + name)
                         && isActive(activateValue, url)) {
-                    activateExtensions.add(getExtension(name));
+                    activateExtensionsMap.put(getExtensionClass(name), getExtension(name));
                 }
             }
-            activateExtensions.sort(ActivateComparator.COMPARATOR);
+            if(!activateExtensionsMap.isEmpty()){
+                activateExtensions.addAll(activateExtensionsMap.values());
+            }
         }
         List<T> loadedExtensions = new ArrayList<>();
         for (int i = 0; i < names.size(); i++) {
