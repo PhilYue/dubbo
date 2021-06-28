@@ -32,7 +32,11 @@ import java.util.concurrent.ConcurrentMap;
 import static org.apache.dubbo.common.BaseServiceMetadata.buildServiceKey;
 
 /**
+ * phil 一个用于缓存ReferenceConfigBase简单实用程序类。
+ * ReferenceConfigBase是一个重对象，需要为频繁创建ReferenceConfigBase的框架缓存这些对象。
+ * 如果您需要使用复杂的策略，您可以实现并使用您自己的ReferenceConfigBase缓存。
  * A simple util class for cache {@link ReferenceConfigBase}.
+ * ---
  * <p>
  * {@link ReferenceConfigBase} is a heavy Object, it's necessary to cache these object
  * for the framework which create {@link ReferenceConfigBase} frequently.

@@ -60,6 +60,8 @@ import static org.apache.dubbo.config.spring.beans.factory.annotation.ServiceBea
 import static org.springframework.util.StringUtils.hasText;
 
 /**
+ * TODO see
+ * phil @reference 申明对象实例化后，实例工厂处理器（BeanPostProcessor 工厂实例化后修改Bean钩子）
  * {@link org.springframework.beans.factory.config.BeanPostProcessor} implementation
  * that Consumer service {@link Reference} annotated fields
  *
@@ -139,11 +141,13 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
     protected Object doGetInjectedBean(AnnotationAttributes attributes, Object bean, String beanName, Class<?> injectedType,
                                        InjectionMetadata.InjectedElement injectedElement) throws Exception {
         /**
+         * 获取被引用对象BeanName，提供者 @DubboService 修饰
          * The name of bean that annotated Dubbo's {@link Service @Service} in local Spring {@link ApplicationContext}
          */
         String referencedBeanName = buildReferencedBeanName(attributes, injectedType);
 
         /**
+         * 获取引用对象BeanName，消费者 @DubboReference 修饰
          * The name of bean that is declared by {@link Reference @Reference} annotation injection
          */
         String referenceBeanName = getReferenceBeanName(attributes, injectedType);

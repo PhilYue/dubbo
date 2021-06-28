@@ -24,6 +24,9 @@ import org.apache.dubbo.config.utils.ReferenceConfigCache;
 import org.apache.dubbo.demo.DemoService;
 import org.apache.dubbo.rpc.service.GenericService;
 
+/**
+ * phil DubboBootstrap consumer demo
+ */
 public class Application {
     public static void main(String[] args) {
         if (isClassic(args)) {

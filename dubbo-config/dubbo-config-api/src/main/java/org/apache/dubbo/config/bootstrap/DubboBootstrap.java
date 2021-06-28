@@ -163,14 +163,18 @@ public class DubboBootstrap {
 
     private volatile boolean exportAsync;
 
+    // 引用 异步开关
     private volatile boolean referAsync;
 
     private AtomicBoolean initialized = new AtomicBoolean(false);
 
+    // 是否启动标记
     private AtomicBoolean started = new AtomicBoolean(false);
 
+    // 引导程序是否准备就绪
     private AtomicBoolean ready = new AtomicBoolean(false);
 
+    // 停止服务
     private AtomicBoolean destroyed = new AtomicBoolean(false);
 
     private volatile ServiceInstance serviceInstance;
@@ -872,11 +876,13 @@ public class DubboBootstrap {
     }
 
     /**
+     * phil 流程图画了大概，需要补充其他明细部分
      * Start the bootstrap
      */
     public DubboBootstrap start() {
+        // 判断是否启动
         if (started.compareAndSet(false, true)) {
-            ready.set(false);
+            ready.set(false); // 引导器未就绪状态
             initialize();
             if (logger.isInfoEnabled()) {
                 logger.info(NAME + " is starting...");
